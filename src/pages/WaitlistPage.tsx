@@ -360,7 +360,7 @@ export const WaitlistPage: React.FC = () => {
                 }`}
                 aria-live="polite"
               >
-                {msg || "We won’t share your email."}
+             
               </p>
 
               <div className="text-xs text-slate-400 mt-1 md:mt-0">
