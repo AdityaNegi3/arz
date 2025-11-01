@@ -60,31 +60,37 @@ export const HomeSplash: React.FC = () => {
               transition={{ delay: 0.25, duration: 0.5 }}
             >
               follow us here for new updates
-              <div className="mt-4 flex items-center justify-center gap-6">
+              <div className="mt-4 flex items-center justify-center">
                 <a
-                  href="https://instagram.com/yourhandle"
+                  href="https://www.instagram.com/arzkaro?igsh=MWNjbDh5OG9saDg2bw%3D%3D&utm_source=qr"
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Instagram"
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-slate-700">
-                    <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.2" />
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.2" />
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className="text-slate-700 hover:text-orange-500 transition-colors"
+                  >
+                    <rect
+                      x="2"
+                      y="2"
+                      width="20"
+                      height="20"
+                      rx="5"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                    />
                     <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
-                  </svg>
-                </a>
-
-                <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-slate-700">
-                    <rect x="2" y="2" width="20" height="20" rx="3" stroke="currentColor" strokeWidth="1.2" />
-                    <path d="M7 10v7M7 7v.01M11 17v-6c0-1.1.9-2 2-2s2 .9 2 2v6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                  </svg>
-                </a>
-
-                <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-slate-700">
-                    <rect x="2" y="6" width="20" height="12" rx="3" stroke="currentColor" strokeWidth="1.2"/>
-                    <path d="M10 9l5 3-5 3V9z" fill="currentColor"/>
                   </svg>
                 </a>
               </div>
