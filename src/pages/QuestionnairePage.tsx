@@ -1,41 +1,9 @@
+// src/pages/QuestionnairePage.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ORANGE = "#FF785A";
 
-// === ENV READER ===
-function readEnv(viteKey: string, nodeKey: string): string | undefined {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const meta = (typeof import.meta !== "undefined" ? (import.meta as any).env : undefined);
-    if (meta && meta[viteKey]) return meta[viteKey];
-  } catch (_) {}
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (typeof process !== "undefined" && (process as any).env && (process as any).env[nodeKey])
-      return (process as any).env[nodeKey];
-  } catch (_) {}
-  return undefined;
-}
-
-// === CONFIG ===
-const XANO_BASE = readEnv("VITE_XANO_BASE_URL", "REACT_APP_XANO_BASE_URL") || "";
-const XANO_KEY = readEnv("VITE_XANO_KEY", "REACT_APP_XANO_KEY") || "";
-
-// your Xano endpoint path
-const QUESTIONS_ENDPOINT = XANO_BASE
-  ? `${XANO_BASE.replace(/\/+$/, "")}/questions`
-  : "";
-
-const defaultHeaders: Record<string, string> = {
-  "Content-Type": "application/json",
-};
-if (XANO_KEY) {
-  defaultHeaders["Authorization"] = `Bearer ${XANO_KEY}`;
-  defaultHeaders["X-API-Key"] = XANO_KEY;
-}
-
-// === QUESTIONS ===
 const questions = [
   {
     id: "q0",
@@ -109,8 +77,6 @@ const QuestionnairePage: React.FC = () => {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, "yes" | "no">>({});
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const q = questions[index];
 
@@ -124,68 +90,9 @@ const QuestionnairePage: React.FC = () => {
 
     if (index < questions.length - 1) {
       setIndex(index + 1);
-      setError(null);
     } else {
-      submitToXano(next);
-    }
-  }
-
-  async function submitToXano(allAnswers: Record<string, "yes" | "no">) {
-    if (!QUESTIONS_ENDPOINT) {
-      console.warn("Xano base URL not set. Skipping remote call.");
+      // ✅ Finished all questions → go to Waitlist
       navigate("/waitlist");
-      return;
-    }
-
-    setSubmitting(true);
-    setError(null);
-
-    // temporarily, email not known yet — WaitlistPage will add it later
-    // we can store a dummy or leave blank for now
-    const emailFromSession =
-      sessionStorage.getItem("waitlist_email") || "unknown@user.com";
-
-    const payload = {
-      answers: Object.values(allAnswers),
-      email_id: emailFromSession,
-    };
-
-    console.log("Submitting to:", QUESTIONS_ENDPOINT, payload);
-
-    try {
-      const res = await fetch(QUESTIONS_ENDPOINT, {
-        method: "POST",
-        headers: defaultHeaders,
-        body: JSON.stringify(payload),
-      });
-
-      const text = await res.text();
-      let body: any = null;
-      try {
-        body = text ? JSON.parse(text) : null;
-      } catch {
-        body = text;
-      }
-
-      console.log("Xano response:", res.status, body);
-
-      if (!res.ok) {
-        throw new Error(
-          `Server ${res.status} — ${
-            typeof body === "string" ? body : JSON.stringify(body)
-          }`
-        );
-      }
-
-      // Success — save locally and go to waitlist
-      sessionStorage.setItem("arz_answer", "yes"); // or mark complete
-      navigate("/waitlist");
-    } catch (err: any) {
-      console.error("Xano submit failed:", err);
-      setError("Could not send answers to server. Saved locally.");
-      navigate("/waitlist");
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -211,9 +118,6 @@ const QuestionnairePage: React.FC = () => {
             <OptionRow letter="A" text="Yes, I have" onClick={() => recordAnswer("yes")} />
             <OptionRow letter="B" text="No, I haven't" onClick={() => recordAnswer("no")} />
           </div>
-
-          {submitting && <div className="mt-4 text-sm text-slate-500">Submitting answers...</div>}
-          {error && <div className="mt-4 text-sm text-red-600">{error}</div>}
         </div>
       </div>
     </div>
